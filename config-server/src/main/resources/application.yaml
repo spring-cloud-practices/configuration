@@ -1,0 +1,16 @@
+server:
+  port: 8888
+
+
+spring:
+  application:
+    name: "config-server"
+  cloud:
+    config:
+      server:
+        prefix: /config-server
+        git:
+          # default 0, 매 요청마다 fetch
+          # 단위는 Second 이며 (refresh > 0 && (now() - lastRefresh) < (refreshRate * 1000) 면 fetch 하지 않음
+          refreshRate: 5
+          uri: https://github.com/evagova/config-repo
