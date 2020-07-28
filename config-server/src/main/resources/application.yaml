@@ -1,10 +1,14 @@
 server:
   port: 8888
 
-
 spring:
   application:
     name: "config-server"
+
+---
+
+spring:
+  profile: git
   cloud:
     config:
       server:
@@ -14,3 +18,19 @@ spring:
           # 단위는 Second 이며 (refresh > 0 && (now() - lastRefresh) < (refreshRate * 1000) 면 fetch 하지 않음
           refreshRate: 5
           uri: https://github.com/evagova/config-repo
+
+---
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb?DB_CLOSE_ON_EXIT=FALSE
+    username: root
+    password: root
+    driver-class-name: org.h2.Driver
+  profile: jdbc
+  cloud:
+    config:
+      server:
+        jdbc:
+          sql: SELECT KEY, VALUE from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=?
+        order: 1

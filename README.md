@@ -10,3 +10,8 @@
 - Spring cloud config client 동작 방식
 - Refresh (endpoint, rabbitmq?)    
 
+---  
+
+# References  
+
+- https://cloud.spring.io/spring-cloud-config/reference/html/
