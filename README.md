@@ -12,6 +12,20 @@
 
 ---  
 
+# Getting started  
+
+> ## Config repo 생성하기  
+
+```cmd
+$ mkdir config-repo
+$ 
+
+```
+
+> ## Spring cloud config server  
+
+
 # References  
 
-- https://cloud.spring.io/spring-cloud-config/reference/html/
+- https://cloud.spring.io/spring-cloud-config/reference/html/  
+- https://medium.com/@circlee7/spring-cloud-config-%EC%A0%95%EB%A6%AC-1-%EB%B2%88%EC%99%B8-da81585400fa

@@ -3,6 +3,7 @@ package demo.server;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.cloud.config.server.environment.EnvironmentController;
 import org.springframework.cloud.config.server.environment.EnvironmentRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -12,14 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Aspect
 @Slf4j
-public class EnvironmentRepositoryLogger {
+public class LoggerAspect {
 
     /**
      * {@link EnvironmentRepository} 의 findOne() 메소드 호출 전 (파라미터, 구현체, Call Stack)을 출력
      */
     @Before("execution(* org.springframework.cloud.config.server.environment.EnvironmentRepository.findOne(..))")
-    public void onBeforeHandle(JoinPoint joinPoint) {
-        logger.info("## EnvironmentRepository({})::findOne is called",
+    public void environmentRepositoryOnBefore(JoinPoint joinPoint) {
+        logger.warn("## EnvironmentRepository({})::findOne is called",
                     joinPoint.getTarget().getClass().getSimpleName());
 
         StringBuilder stack = new StringBuilder();
@@ -32,7 +33,7 @@ public class EnvironmentRepositoryLogger {
 
         Object[] args = joinPoint.getArgs();
 
-        logger.info("application: {} / profile : {} / label : {}\n{}", args[0], args[1], args[2], stack.toString());
+        logger.warn("application: {} / profile : {} / label : {}\n{}", args[0], args[1], args[2], stack.toString());
     }
 
     /* curl -XGET http://localhost:8888/demo/default 호출 시 출력 결과
@@ -47,4 +48,17 @@ org.springframework.cloud.config.server.environment.EnvironmentController.getEnv
 org.springframework.cloud.config.server.environment.EnvironmentController.defaultLabel(EnvironmentController.java:108)
 org.springframework.cloud.config.server.environment.EnvironmentController$$EnhancerBySpringCGLIB$$9286781c.defaultLabel(<generated>)
      */
+
+    /**
+     * {@link EnvironmentController}의 Endpoint 호출 시 로깅
+     */
+    @Before("execution(* org.springframework.cloud.config.server.environment.EnvironmentController.default*(..))"
+            + "|| execution(* org.springframework.cloud.config.server.environment.EnvironmentController.labelled*(..))")
+    public void environmentControllerOnBefore(JoinPoint joinPoint) {
+        logger.warn("## EnvironmentController called: {}", joinPoint.getSignature());
+        String name = joinPoint.getArgs()[0].toString();
+        String profiles = joinPoint.getArgs()[1].toString();
+        String label = joinPoint.getArgs().length > 2 ? joinPoint.getArgs()[2].toString() : "null";
+        logger.warn("name : {} / profiles : {} / label : {}", name, profiles, label);
+    }
 }
