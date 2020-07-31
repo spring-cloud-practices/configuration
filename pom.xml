@@ -21,6 +21,20 @@
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
+  <repositories>
+    <repository>
+      <id>maven-central</id>
+      <name>maven central repo</name>
+      <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+
+    <repository>
+      <id>jcenter</id>
+      <name>jcenter repo</name>
+      <url>https://dl.bintray.com/ethereum/maven/</url>
+    </repository>
+  </repositories>
+
   <properties>
     <java.version>8</java.version>
     <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
